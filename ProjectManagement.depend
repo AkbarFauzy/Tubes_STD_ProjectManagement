@@ -1,0 +1,39 @@
+# depslib dependency file v1.0
+1586179025 source:c:\users\lenovo\documents\paktikum\tubes\projectmanagement\main.cpp
+	"main.h"
+
+1586179069 c:\users\lenovo\documents\paktikum\tubes\projectmanagement\main.h
+	<iostream>
+	<conio.h>
+
+1586177474 source:c:\users\lenovo\documents\paktikum\tubes\projectmanagement\mainfunction.cpp
+	"main.h"
+
+1586179200 source:c:\users\lenovo\documents\paktikum\tubes\projectmanagement\programmerlist.cpp
+	"main.h"
+
+1586159835 source:c:\users\lenovo\documents\paktikum\tubes\projectmanagement\projectlist.cpp
+	"main.h"
+
+1586104851 source:c:\users\lenovo\documents\paktikum\tubes\projectmanagement\relationlist.cpp
+	"main.h"
+
+1586179025 source:c:\users\lenovo\documents\paktikum\tubes\tubes_std_projectmanagement\main.cpp
+	"main.h"
+
+1586179069 c:\users\lenovo\documents\paktikum\tubes\tubes_std_projectmanagement\main.h
+	<iostream>
+	<conio.h>
+
+1586177474 source:c:\users\lenovo\documents\paktikum\tubes\tubes_std_projectmanagement\mainfunction.cpp
+	"main.h"
+
+1586180389 source:c:\users\lenovo\documents\paktikum\tubes\tubes_std_projectmanagement\programmerlist.cpp
+	"main.h"
+
+1586159835 source:c:\users\lenovo\documents\paktikum\tubes\tubes_std_projectmanagement\projectlist.cpp
+	"main.h"
+
+1586104851 source:c:\users\lenovo\documents\paktikum\tubes\tubes_std_projectmanagement\relationlist.cpp
+	"main.h"
+
