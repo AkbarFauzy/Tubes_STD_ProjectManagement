@@ -75,9 +75,9 @@ bool isEmpty(programmerList L);
 
 //Project.cpp
 void createProjectList(projectList &L);
-void viewDataProject();
-void insertLast();
+void viewDataProject(projectList L);
+void insertLast(projectList &L, projectAddress P);
 void updateDataProject();
-void deleteDataProject();
+void deleteDataProject(projectList &L, projectAddress &P);
 
 #endif // MAIN_H_INCLUDED

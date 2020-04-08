@@ -53,13 +53,13 @@ int main()
             }else if(input == 4){
                 viewDataProgrammer(programmer);
             }else if(input == 5){
-
+                viewDataProject(project);
             }else if(input == 6){
-
+                viewDataProject(project);
             }else if(input == 7){
-
+                viewDataProject(project);
             }else if(input == 8){
-
+                viewDataProject(project);
             }else{
 
             }

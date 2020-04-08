@@ -9,6 +9,8 @@ void viewAssignProject(){
 }
 void programmerMenu(){
     //cout<<""<<endl;
+    cout<<"1. View all project"<<endl;
+    cout<<"2. View all project deadline"<<endl;
 }
 void managerMenu(int &input){
     cout<<"1. Assign Project to Programmer"<<endl;
