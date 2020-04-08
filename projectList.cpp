@@ -1,6 +1,6 @@
 #include "main.h"
 
-void createChildList(childList &L){
+void createProjectList(projectList &L){
 
 }
 void viewDataProject(){

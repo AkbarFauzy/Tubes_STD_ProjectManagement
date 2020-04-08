@@ -7,11 +7,11 @@ int main()
     bool logged,stop;
     string username, password;
 
-    parentList parent;
-    childList child;
+    programmerList programmer;
+    projectList project;
 
-    createParentList(parent);
-    createChildList(child);
+    createProgrammerList(programmer);
+    createProjectList(project);
 
     logged = true;
     activeRole = 1;
@@ -31,25 +31,27 @@ int main()
             if(input == 1){
 
                 user tempUser;
-                parentAddress newProgrammer;
+                programmerAddress newProgrammer;
 
                 cout<<"Username : ";
                 cin>>tempUser.username;
-                while(isUsernameExist(parent, tempUser.username)){
+                while(isUsernameExist(programmer, tempUser.username)){
                     cout<<"Username : ";
                     cin>>tempUser.username;
                 }
                 cout<<"Password : ";
                 cin>>tempUser.password;
                 tempUser.role == 3;
-                newProgrammer = createParentElmn(tempUser);
-                insertByUsername(parent, newProgrammer);
+                newProgrammer = createProgrammerElmn(tempUser);
+                insertByUsername(programmer, newProgrammer);
             }else if(input == 2){
-
+                viewDataProgrammer(programmer);
+      //          updateDataProgrammer();
             }else if(input == 3){
-
+                viewDataProgrammer(programmer);
+                //deleteDataProgrammer();
             }else if(input == 4){
-                viewDataProgrammer(parent);
+                viewDataProgrammer(programmer);
             }else if(input == 5){
 
             }else if(input == 6){

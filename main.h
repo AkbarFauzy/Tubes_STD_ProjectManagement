@@ -20,37 +20,39 @@ struct date{
     int yy;
 };
 
-typedef struct projectElmn *childAddress;
-typedef struct programmerElmn *parentAddress;
+typedef struct projectElmn *projectAddress;
+typedef struct programmerElmn *programmerAddress;
 typedef struct relationElmn *relationAddress;
 
 struct user{
     string username;
     string password;
-    //string id;
+    int id;
     int role;
 };
 
 struct relationElmn{
-    parentAddress up;
-    childAddress down;
+    programmerAddress up;
+    projectAddress down;
+    string assignment;
     relationAddress next;
 };
 
 struct programmerElmn{
     user programmer;
-    parentAddress next;
+    programmerAddress next;
 };
 
 struct projectElmn{
     string projectName;
     date deadline;
-    childAddress next;
+    projectAddress next;
 };
 
-struct parentList{parentAddress first;};
+const int idCounter = 1;
 
-struct childList{childAddress first;};
+struct programmerList{programmerAddress first;};
+struct projectList{projectAddress first;};
 
 //mainFucntion.cpp
 void viewTotalAssignment();
@@ -62,17 +64,17 @@ void Login(bool &logged, int &activeRole);
 
 
 //Programmer.cpp
-void createParentList(parentList &L);
-parentAddress createParentElmn(user U);
-void viewDataProgrammer(parentList L);
-void insertByUsername(parentList &L, parentAddress P);
+void createProgrammerList(programmerList &L);
+programmerAddress createProgrammerElmn(user U);
+void viewDataProgrammer(programmerList L);
+void insertByUsername(programmerList &L, programmerAddress P);
 void updateDataProgrammer();
-void deleteDataProgrammer();
-bool isUsernameExist(parentList L, string username);
-bool isEmpty(parentList L);
+void deleteDataProgrammer(programmerList &L, programmerAddress &P);
+bool isUsernameExist(programmerList L, string username);
+bool isEmpty(programmerList L);
 
 //Project.cpp
-void createChildList(childList &L);
+void createProjectList(projectList &L);
 void viewDataProject();
 void insertLast();
 void updateDataProject();
