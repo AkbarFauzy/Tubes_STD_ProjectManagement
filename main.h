@@ -3,13 +3,15 @@
 
 #include <iostream>
 #include <conio.h>
+#include <stdlib.h>
+#include <limits>
 
 #define up(P) P->up
 #define down(P) P->down
+#define assignment(P) P->assignment
 #define next(P) P->next
 #define programmer(P) P->programmer
-#define projectName(P) P->projectName
-#define deadline(P) P->deadline
+#define project(P) P->project
 #define first(L) L.first
 
 using namespace std;
@@ -24,60 +26,90 @@ typedef struct projectElmn *projectAddress;
 typedef struct programmerElmn *programmerAddress;
 typedef struct relationElmn *relationAddress;
 
-struct user{
+struct userInfo{
+    int id;
     string username;
     string password;
-    int id;
     int role;
+};
+
+struct ProjectInfo{
+    int id;
+    string projectName;
+    date deadline;
+};
+
+struct assignmentInfo{
+    int id;
+    string assignmentDesc;
+    date deadline;
+    int status;
 };
 
 struct relationElmn{
     programmerAddress up;
     projectAddress down;
-    string assignment;
+    assignmentInfo assignment;
     relationAddress next;
 };
 
 struct programmerElmn{
-    user programmer;
+    userInfo programmer;
     programmerAddress next;
 };
 
 struct projectElmn{
-    string projectName;
-    date deadline;
+    ProjectInfo project;
     projectAddress next;
 };
 
-const int idCounter = 1;
-
 struct programmerList{programmerAddress first;};
 struct projectList{projectAddress first;};
+struct relationList{relationAddress first;};
 
 //mainFucntion.cpp
+bool validateInput();
 void viewTotalAssignment();
-void viewAssignProject();
-void programmerMenu();
+void viewProgrammerAssignment(relationList L, programmerAddress P);
+void viewProjectAssignment(relationList L, projectAddress P);
+void programmerMenu(int &input);
 void managerMenu(int &input);
 void adminMenu(int &input);
-void Login(bool &logged, int &activeRole);
+void Login(string username, string password, programmerList L,bool &logged, int &activeRole, programmerAddress &tempProgrammer);
 
+//relation.cpp
+void createRelationList(relationList &L);
+relationAddress createRelationElmn(assignmentInfo R, programmerAddress P, projectAddress Pr);
+void insertFirstRelation(relationList &L, relationAddress P);
+void viewDataAssignment(relationList L);
+relationAddress searchAssignmentById(relationList L, int input);
+void getAssignment(relationList assignment, relationAddress &tempAssignment);
+void updateAssignmentStatus(relationAddress &P);
+void deleteDataAssignment(relationList &L, relationAddress &P);
+bool isAssignmentDuplicate(programmerAddress tempProgrammer, projectAddress tempProject, relationList A);
 
 //Programmer.cpp
 void createProgrammerList(programmerList &L);
-programmerAddress createProgrammerElmn(user U);
-void viewDataProgrammer(programmerList L);
+programmerAddress createProgrammerElmn(userInfo U);
+void viewDataProgrammer(programmerList L, relationList A = {NULL}, bool isGetTotal = false);
+int countDataProgrammerAssignment(relationList A, programmerAddress P);
 void insertByUsername(programmerList &L, programmerAddress P);
-void updateDataProgrammer();
+void updateDataProgrammer(programmerList &L, programmerAddress &P, int type);
 void deleteDataProgrammer(programmerList &L, programmerAddress &P);
+programmerAddress searchProgrammerById(programmerList L, int userId);
 bool isUsernameExist(programmerList L, string username);
 bool isEmpty(programmerList L);
+void getProgrammer(programmerList programmer, programmerAddress &tempProgrammer);
 
 //Project.cpp
 void createProjectList(projectList &L);
-void viewDataProject(projectList L);
+projectAddress createProjectElmn(ProjectInfo P);
+void viewDataProject(projectList L, relationList A = {NULL}, bool isGetProgrammer = false);
 void insertLast(projectList &L, projectAddress P);
-void updateDataProject();
+void updateDataProject(projectAddress &P, int type);
 void deleteDataProject(projectList &L, projectAddress &P);
+projectAddress searchProjectById(projectList L, int projectId);
+void getProject(projectList programmer, projectAddress &tempProject);
+string getProjectStatus(int S);
 
 #endif // MAIN_H_INCLUDED
