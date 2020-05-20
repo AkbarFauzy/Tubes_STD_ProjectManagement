@@ -42,7 +42,6 @@ struct ProjectInfo{
 struct assignmentInfo{
     int id;
     string assignmentDesc;
-    date deadline;
     int status;
 };
 
@@ -69,15 +68,13 @@ struct relationList{relationAddress first;};
 
 //mainFucntion.cpp
 bool validateInput();
-void viewTotalAssignment();
-void viewProgrammerAssignment(relationList L, programmerAddress P);
-void viewProjectAssignment(relationList L, projectAddress P);
-void programmerMenu(int &input);
 void managerMenu(int &input);
 void adminMenu(int &input);
 void Login(string username, string password, programmerList L,bool &logged, int &activeRole, programmerAddress &tempProgrammer);
 
 //relation.cpp
+void viewProgrammerAssignment(relationList L, programmerAddress P);
+void viewProjectAssignment(relationList L, projectAddress P);
 void createRelationList(relationList &L);
 relationAddress createRelationElmn(assignmentInfo R, programmerAddress P, projectAddress Pr);
 void insertFirstRelation(relationList &L, relationAddress P);
@@ -87,6 +84,9 @@ void getAssignment(relationList assignment, relationAddress &tempAssignment);
 void updateAssignmentStatus(relationAddress &P);
 void deleteDataAssignment(relationList &L, relationAddress &P);
 bool isAssignmentDuplicate(programmerAddress tempProgrammer, projectAddress tempProject, relationList A);
+void printProgrammerAssignmentByDate(relationList R, programmerAddress P);
+void insertRelationByDate(relationList &L, relationAddress Q);
+string getAssignmentStatus(int S);
 
 //Programmer.cpp
 void createProgrammerList(programmerList &L);
@@ -95,7 +95,7 @@ void viewDataProgrammer(programmerList L, relationList A = {NULL}, bool isGetTot
 int countDataProgrammerAssignment(relationList A, programmerAddress P);
 void insertByUsername(programmerList &L, programmerAddress P);
 void updateDataProgrammer(programmerList &L, programmerAddress &P, int type);
-void deleteDataProgrammer(programmerList &L, programmerAddress &P);
+void deleteDataProgrammer(programmerList &L, programmerAddress &P, relationList &R);
 programmerAddress searchProgrammerById(programmerList L, int userId);
 bool isUsernameExist(programmerList L, string username);
 bool isEmpty(programmerList L);
@@ -107,9 +107,9 @@ projectAddress createProjectElmn(ProjectInfo P);
 void viewDataProject(projectList L, relationList A = {NULL}, bool isGetProgrammer = false);
 void insertLast(projectList &L, projectAddress P);
 void updateDataProject(projectAddress &P, int type);
-void deleteDataProject(projectList &L, projectAddress &P);
+void deleteDataProject(projectList &L, projectAddress &P, relationList &R);
 projectAddress searchProjectById(projectList L, int projectId);
 void getProject(projectList programmer, projectAddress &tempProject);
-string getProjectStatus(int S);
+
 
 #endif // MAIN_H_INCLUDED

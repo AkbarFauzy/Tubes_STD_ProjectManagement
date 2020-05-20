@@ -30,7 +30,8 @@ int main()
     activeRole = 2;
 
     while(!stop){
-        //Login
+        //
+        system("CLS");
         cout<<"Username : ";
         cin>>username;
         cout<<"Password : ";
@@ -86,9 +87,7 @@ int main()
                         }
                     }else if(input == 3){ // DELETE PROGRAMMER
                         getProgrammer(programmer, tempProgrammer);
-                        if(tempProgrammer != NULL){
-                            deleteDataProgrammer(programmer, tempProgrammer);
-                        }
+                        deleteDataProgrammer(programmer,tempProgrammer, assignment);
                     }else if(input == 4){ // VIEW PROGRAMMER
                         viewDataProgrammer(programmer);
                     }else if(input == 5){ // ADD PROJECT
@@ -97,15 +96,18 @@ int main()
                         cin>>tempPr.projectName;
                         cout<<"Deadline (dd mm yy) : ";
                         cin>>tempPr.deadline.dd;
-                        while((tempPr.deadline.dd > 31 || tempPr.deadline.dd < 1) && !validateInput()){
+                        while(!validateInput() || tempPr.deadline.dd > 31 || tempPr.deadline.dd < 1){
+                            cout<<"Hari tidak valid (1-31), masukan ulang :";
                             cin>>tempPr.deadline.dd;
                         }
                         cin>>tempPr.deadline.mm;
-                        while((tempPr.deadline.mm > 12 || tempPr.deadline.dd < 1) && !validateInput()){
+                        while(!validateInput() || tempPr.deadline.mm > 12 || tempPr.deadline.dd < 1){
+                            cout<<"Bulan tidak valid (1-12), masukan ulang :";
                             cin>>tempPr.deadline.mm;
                         }
                         cin>>tempPr.deadline.yy;
-                        while((tempPr.deadline.yy < 0 || tempPr.deadline.yy > 99) && !validateInput()){
+                        while(!validateInput() ||tempPr.deadline.yy < 0 || tempPr.deadline.yy > 99){
+                            cout<<"Tahun tidak valid (0-99), masukan ulang :";
                             cin>>tempPr.deadline.yy;
                         }
                         tempPr.id = idCounterPr;
@@ -128,9 +130,7 @@ int main()
                         }
                     }else if(input == 7){ // DELETE PROJECT
                         getProject(project, tempProject);
-                        if(tempProject != NULL){
-                            deleteDataProject(project, tempProject);
-                        }
+                        deleteDataProject(project, tempProject, assignment);
                     }else if(input == 8){ // VIEW PROJECT
                         viewDataProject(project);
                     }else if(input == 9){
@@ -142,76 +142,71 @@ int main()
                 }
             }else if(activeRole == 2){
                 managerMenu(input);
-                if(input == 1){ // ASSIGN PROJECT TO PROGRAMMER
-                    tempProgrammer = NULL;
-                    tempProject = NULL;
+                if(validateInput()){
+                    if(input == 1){ // ASSIGN PROJECT TO PROGRAMMER
+                        if(first(programmer) == NULL){
+                            cout<<"Tidak ada Programmer untuk ditugaskan"<<endl;
+                        }else if(first(project) == NULL){
+                            cout<<"Tidak ada Project untuk ditugaskan"<<endl;
+                        }else{
+                            tempProgrammer = NULL;
+                            tempProject = NULL;
+                            //GET THE PROGRAMMER
+                            cout<<"---------------------------------------"<<endl;
+                            cout<<"Select the Programmer"<<endl;
+                            getProgrammer(programmer,tempProgrammer);
+                            if(tempProgrammer!=NULL){
+                                //GET THE PROJECT
+                                cout<<"---------------------------------------"<<endl;
+                                cout<<"Select the Project"<<endl;
+                                cout<<"---------------------------------------"<<endl;
+                                getProject(project, tempProject);
+                                cout<<"---------------------------------------"<<endl;
 
-                    //GET THE PROGRAMMER
-                    cout<<"---------------------------------------"<<endl;
-                    cout<<"Select the Programmer"<<endl;
-                    cout<<"---------------------------------------"<<endl;
-                    getProgrammer(programmer,tempProgrammer);
-                    //GET THE PROJECT
-                    cout<<"---------------------------------------"<<endl;
-                    cout<<"Select the Project"<<endl;
-                    cout<<"---------------------------------------"<<endl;
-                    getProject(project, tempProject);
-                    cout<<"---------------------------------------"<<endl;
-
-                    if(isAssignmentDuplicate(tempProgrammer, tempProject, assignment)){
-                        //CREATE RELATION
-                        cout<<"Assignment Description : ";
-                        cin>>tempAss.assignmentDesc;
+                                if(!isAssignmentDuplicate(tempProgrammer, tempProject, assignment) && tempProject != NULL){
+                                    //CREATE RELATION
+                                    cout<<"Assignment Description : ";
+                                    cin>>tempAss.assignmentDesc;
+                                    cout<<"---------------------------------------"<<endl;
+                                    tempAss.id = idCounterAss;
+                                    idCounterAss++;
+                                    tempRelation = createRelationElmn(tempAss, tempProgrammer, tempProject);
+                                    insertFirstRelation(assignment, tempRelation);
+                                }else{
+                                    cout<<"Programmer Have been Assigned to this Project"<<endl;
+                                }
+                            }
+                        }
+                    }else if(input == 2){// VIEW ASSIGNMENT DETAIL OF A PROGRAMMER
+                        getProgrammer(programmer, tempProgrammer);
                         cout<<"---------------------------------------"<<endl;
-                        cout<<"Assignment Deadline (dd mm yy) : ";
-                        cin>>tempAss.deadline.dd;
-                        while((tempAss.deadline.dd > 31 || tempAss.deadline.dd < 1) && !validateInput()){
-                            cin>>tempAss.deadline.dd;
-                        }
-                        cin>>tempAss.deadline.mm;
-                        while((tempAss.deadline.mm > 12 || tempAss.deadline.dd < 1) && !validateInput()){
-                            cin>>tempAss.deadline.mm;
-                        }
-                        cin>>tempPr.deadline.yy;
-                        while((tempAss.deadline.yy < 0 || tempAss.deadline.yy > 99) && !validateInput()){
-                            cin>>tempAss.deadline.yy;
-                        }
+                        viewProgrammerAssignment(assignment, tempProgrammer);
+                    }else if(input == 3){// VIEW ASSIGNMENT DETTAIL OF A PROJECT
+                        getProject(project, tempProject);
                         cout<<"---------------------------------------"<<endl;
-                        tempAss.id = idCounterAss;
-                        idCounterAss++;
-                        tempRelation = createRelationElmn(tempAss, tempProgrammer, tempProject);
-                        insertFirstRelation(assignment, tempRelation);
-                    }else{
-                        cout<<"Programmer Have been Assigned to this Project";
+                        viewProjectAssignment(assignment, tempProject);
+                    }else if(input == 4){// VIEW ALL PROGRAMMER AND ASSIGNMENT
+                        viewDataProgrammer(programmer, assignment, true);
+                    }else if(input == 5){// VIEW ALL PROJECT AND PROGRAMMER
+                        viewDataProject(project, assignment, true);
+                    }else if(input == 6){// CHANGE ASSIGNMENT STATUS
+                        getAssignment(assignment, tempRelation);
+                        if(tempRelation!=NULL){
+                            updateAssignmentStatus(tempRelation);
+                        }
+                    }else if(input == 7){// DELETE AN ASSIGNMENT
+                        getAssignment(assignment, tempRelation);
+                        deleteDataAssignment(assignment, tempRelation);
+                    }else if(input == 8){
+                        logged = false;
+                        activeRole = 0;
                     }
-                }else if(input == 2){// VIEW ASSIGNMENT DETAIL OF A PROGRAMMER
-                    getProgrammer(programmer, tempProgrammer);
-                    cout<<"---------------------------------------"<<endl;
-                    viewProgrammerAssignment(assignment, tempProgrammer);
-                }else if(input == 3){// VIEW ASSIGNMENT DETTAIL OF A PROJECT
-                    getProject(project, tempProject);
-                    cout<<"---------------------------------------"<<endl;
-                    viewProjectAssignment(assignment, tempProject);
-                }else if(input == 4){// VIEW ALL PROGRAMMER AND ASSIGNMENT
-                    viewDataProgrammer(programmer, assignment, true);
-                }else if(input == 5){// VIEW ALL PROJECT AND PROGRAMMER
-                    viewDataProject(project);
-                }else if(input == 6){// CHANGE ASSIGNMENT STATUS
-                    viewDataAssignment(assignment);
-                    getAssignment(assignment, tempRelation);
-                    updateAssignmentStatus(tempRelation);
-                }else if(input == 7){// DELETE AN ASSIGNMENT
-                    getAssignment(assignment, tempRelation);
-                    deleteDataAssignment(assignment, tempRelation);
-                }else if(input == 8){
-                    logged = false;
-                    activeRole = 0;
                 }
             }else if(activeRole == 3){
                 cout<<"---------------------------------------"<<endl;
-                cout<<"Yout total Assignment " << countDataProgrammerAssignment(assignment, tempProgrammer)<<endl;
+                cout<<"Your total Assignment = " << countDataProgrammerAssignment(assignment, tempProgrammer)<<endl;
                 cout<<"---------------------------------------"<<endl;
-                viewProgrammerAssignment(assignment,tempProgrammer);
+                printProgrammerAssignmentByDate(assignment, tempProgrammer);
                 cout<<"---------------------------------------"<<endl;
                 cout<<"Input 9 to Logout \n Your Input : ";
                 cin>>input;

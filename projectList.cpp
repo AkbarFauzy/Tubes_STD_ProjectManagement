@@ -24,7 +24,11 @@ void viewDataProject(projectList L, relationList A, bool isGetProgrammer){
     }else{
         cout<<"---------------------------------------"<<endl;
         cout << "List Project: " << endl;
-        cout <<"ID\t\tProject Name\t\tDeadline"<<endl;
+        if (isGetProgrammer){
+            cout <<"ID\t\tProject Name\t\tTotal Programmer\t\tDeadline"<<endl;
+        }else{
+            cout <<"ID\t\tProject Name\t\tDeadline"<<endl;
+        }
         while(P!=NULL){
             if(isGetProgrammer){
                 R = first(A);
@@ -33,18 +37,18 @@ void viewDataProject(projectList L, relationList A, bool isGetProgrammer){
                 while(R != NULL){
                     if(down(R) == P){
                         counter++;
-                        cout<<counter<<". "<<up(R)<<endl;
                     }
                     R = next(R);
                 }
-
+                cout<<project(P).id<<"\t\t"<<project(P).projectName<<"\t\t"<<counter<<"\t"<<project(P).deadline.dd<<"-"<<project(P).deadline.mm<<"-"<<project(P).deadline.yy<<endl;
             }else{
-                cout<<project(P).id<<"\t\t"<<project(P).projectName<<"\t\t"<<counter<<"\t\t"<<project(P).deadline.dd<<"-"<<project(P).deadline.mm<<"-"<<project(P).deadline.yy<<endl;
+                cout<<project(P).id<<"\t\t"<<project(P).projectName<<"\t\t"<<"\t"<<project(P).deadline.dd<<"-"<<project(P).deadline.mm<<"-"<<project(P).deadline.yy<<endl;
             }
             P = next(P);
         }
     }
 }
+
 void insertLast(projectList &L, projectAddress P){
     projectAddress Q = first(L);
 
@@ -58,6 +62,7 @@ void insertLast(projectList &L, projectAddress P){
     }
 
 }
+
 void updateDataProject(projectAddress &P, int type){
     ProjectInfo tempProject;
     if(type == 1 || type == 3){
@@ -72,21 +77,22 @@ void updateDataProject(projectAddress &P, int type){
             cout<<"---------------------------------------"<<endl;
             cout<<"Old Deadline : "<< project(P).projectName<<"\t\t"<<project(P).deadline.dd<<"-"<<project(P).deadline.mm<<"-"<<project(P).deadline.yy<<endl;
             cout<<"---------------------------------------"<<endl;
-            cout<<"New Deadline : ";
+            cout<<"New Deadline (dd mm yy): ";
             cin>>tempProject.deadline.dd;
-            while((tempProject.deadline.dd > 31 || tempProject.deadline.dd < 1) && !validateInput()){
+            while(!validateInput() || tempProject.deadline.dd > 31 || tempProject.deadline.dd < 1 ){
+                cout<<"Hari tidak valid (1-31), masukan ulang :";
                 cin>>tempProject.deadline.dd;
             }
             cin>>tempProject.deadline.mm;
-            while((tempProject.deadline.mm > 12 || tempProject.deadline.dd < 1) && !validateInput()){
+            while(!validateInput() || tempProject.deadline.mm > 12 || tempProject.deadline.dd < 1){
+                cout<<"Bulan tidak valid (1-12), masukan ulang :";
                 cin>>tempProject.deadline.mm;
             }
             cin>>tempProject.deadline.yy;
-            while((tempProject.deadline.yy < 0 || tempProject.deadline.yy > 99) && !validateInput()){
+            while(!validateInput() || tempProject.deadline.yy < 0 || tempProject.deadline.yy > 99){
+                cout<<"Tahun tidak valid (0-99), masukan ulang :";
                 cin>>tempProject.deadline.yy;
             }
-            cin>>tempProject.deadline.mm;
-            cin>>tempProject.deadline.yy;
             cout<<"---------------------------------------"<<endl;
     }
 
@@ -98,20 +104,33 @@ void updateDataProject(projectAddress &P, int type){
     }
 }
 
-void deleteDataProject(projectList &L, projectAddress &P){
+void deleteDataProject(projectList &L, projectAddress &P, relationList &R){
     projectAddress Q = first(L);
-    if (P == first(L)){
-        first(L) = next(P);
-        next(P) = NULL;
-    }else{
-        while(next(Q)!= P){
-            Q = next(Q);
+    relationAddress rel = first(R);
+
+    if(P!=NULL){
+        if(first(R)!=NULL){
+            while(rel!=NULL){
+                if(down(rel) == P){
+                    deleteDataAssignment(R, rel);
+                }
+                rel = next(rel);
+            }
         }
-        if(next(next(Q))==NULL){
-            next(Q) = NULL;
-        }else{
-            next(Q) = next(P);
+
+        if (P == first(L)){
+            first(L) = next(P);
             next(P) = NULL;
+        }else{
+            while(next(Q)!= P){
+                Q = next(Q);
+            }
+            if(next(next(Q))==NULL){
+                next(Q) = NULL;
+            }else{
+                next(Q) = next(P);
+                next(P) = NULL;
+            }
         }
     }
 }
@@ -132,8 +151,9 @@ void getProject(projectList project, projectAddress &tempProject){
     tempProject = NULL;
     cout<<"---------------------------------------"<<endl;
     viewDataProject(project);
+    cout<<"---------------------------------------"<<endl;
     cout<<"Select a Project ID: ";
-    while(tempProject == NULL){
+    if(tempProject == NULL){
         cin>>input;
         while(!validateInput()){
             cin>>input;
@@ -142,19 +162,5 @@ void getProject(projectList project, projectAddress &tempProject){
     }
 }
 
-string getProjectStatus(int S){
-    if(S == 1){
-        return "Not Started";
-    }else if(S == 2){
-        return "In Progress";
-    }else if(S == 3){
-        return "On Hold";
-    }else if(S == 4){
-        return "Completed";
-    }else{
-        return "ERROR";
-    }
-
-}
 
 

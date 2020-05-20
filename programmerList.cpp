@@ -17,7 +17,7 @@ programmerAddress createProgrammerElmn(userInfo U){
 
 void viewDataProgrammer(programmerList L , relationList A, bool isGetTotal ){
     if(isEmpty(L)){
-        cout<<"Tidak ada Programemr saat ini"<<endl;
+        cout<<"Tidak ada Programmer saat ini"<<endl;
     }else{
         programmerAddress P = first(L);
         cout<<"---------------------------------------"<<endl;
@@ -53,11 +53,11 @@ int countDataProgrammerAssignment(relationList A, programmerAddress P){
 void insertByUsername(programmerList &L, programmerAddress P){
     programmerAddress Q = first(L);
     if(!isEmpty(L)){
-        if(programmer(Q).username > programmer(P).username){
+        if(programmer(Q).username > programmer(P).username ){
             next(P) = Q;
             first(L) = P;
         }else{
-            while(programmer(Q).username < programmer(P).username && next(Q) != NULL){
+            while(next(Q) != NULL && programmer(next(Q)).username < programmer(P).username){
                 Q = next(Q);
             }
             if(next(Q)==NULL){
@@ -104,26 +104,53 @@ void updateDataProgrammer(programmerList &L, programmerAddress &P, int type)
     }
 
     if(type != 2){
-        deleteDataProgrammer(L, P);
+    programmerAddress Q = first(L);
+
+        if (P == first(L)){
+            first(L) = next(P);
+            next(P) = NULL;
+        }else{
+            while(next(Q)!= P){
+                Q = next(Q);
+            }
+            if(next(next(Q))==NULL){
+                next(Q) = NULL;
+            }else{
+                next(Q) = next(P);
+                next(P) = NULL;
+            }
+        }
         insertByUsername(L,P);
     }
 }
 
-
-void deleteDataProgrammer(programmerList &L, programmerAddress &P){
+void deleteDataProgrammer(programmerList &L, programmerAddress &P, relationList &R){
     programmerAddress Q = first(L);
-    if(P == first(L)){
-        first(L) = next(P);
-        next(P) = NULL;
-    }else{
-        while(next(Q)!=P){
-            Q = next(Q);
+    relationAddress rel = first(R);
+
+    if(P!=NULL){
+        if(first(R)!=NULL){
+            while(rel!=NULL){
+                if(up(rel) == P){
+                    deleteDataAssignment(R, rel);
+                }
+                rel = next(rel);
+            }
         }
-        if(next(next(Q))==NULL){
-            next(Q) = NULL;
-        }else{
-            next(Q) = next(P);
+
+        if(P == first(L)){
+            first(L) = next(P);
             next(P) = NULL;
+        }else{
+            while(next(Q)!=P){
+                Q = next(Q);
+            }
+            if(next(next(Q))==NULL){
+                next(Q) = NULL;
+            }else{
+                next(Q) = next(P);
+                next(P) = NULL;
+            }
         }
     }
 }
@@ -166,7 +193,7 @@ void getProgrammer(programmerList programmer, programmerAddress &tempProgrammer)
     viewDataProgrammer(programmer);
     cout<<"---------------------------------------"<<endl;
     cout<<"Select a Programmer ID: ";
-    while(tempProgrammer == NULL){
+    if(tempProgrammer == NULL){
         cin>>input;
         while(!validateInput()){
             cin>>input;
